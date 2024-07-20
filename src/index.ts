@@ -1,27 +1,18 @@
 import express from 'express';
-import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
-import { Apartamento } from './models/Apartamento';
-import { Veiculo } from './models/Veiculo';
+import { AppDataSource } from './data-source'; // Importar o DataSource
+import apartamentoRoutes from './routes/apartamento.routes';
 
 dotenv.config();
 
+console.log('DB_USERNAME:', process.env.DB_USERNAME);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_NAME:', process.env.DB_NAME);
+
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
-
-// Configuração da conexão com o banco de dados
-const AppDataSource = new DataSource({
-    type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    entities: [Apartamento, Veiculo],
-    synchronize: true,
-});
 
 // Conectar ao banco de dados
 AppDataSource.initialize()
@@ -32,7 +23,9 @@ AppDataSource.initialize()
         console.error('Erro ao conectar ao banco de dados', error);
     });
 
-// Rotas básicas
+// Rotas
+app.use('/api', apartamentoRoutes);
+
 app.get('/', (req, res) => {
     res.send('Servidor está funcionando!');
 });
