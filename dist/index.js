@@ -40,9 +40,9 @@ const AppDataSource = new typeorm_1.DataSource({
     type: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    username: "postgres",
+    password: "avivamento23",
+    database: "postgres",
     entities: [Apartamento_1.Apartamento, Veiculo_1.Veiculo],
     synchronize: true,
 });

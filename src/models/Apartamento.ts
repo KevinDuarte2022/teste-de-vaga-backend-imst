@@ -1,31 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Veiculo } from './Veiculo';
 
 @Entity()
 export class Apartamento {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column()
-    bloco: number;
+    bloco!: string;
 
     @Column()
-    apartamento: number;
+    apartamento!: string;
 
     @Column()
-    morador: string;
+    morador!: string;
 
     @Column()
-    telefone: string;
+    telefone!: string;
 
-    @Column({ nullable: true })
-    email: string;
+    @Column()
+    email!: string;
 
-    constructor() {
-        this.id = 0; // Ou outra lógica de inicialização adequada
-        this.bloco = 0;
-        this.apartamento = 0;
-        this.morador = '';
-        this.telefone = '';
-        this.email = '';
-    }
+    @OneToMany(() => Veiculo, veiculo => veiculo.id_apartamento)
+    veiculos!: Veiculo[];
 }

@@ -1,35 +1,39 @@
-import express from 'express';
-import * as dotenv from 'dotenv';
-import { AppDataSource } from './data-source'; // Importar o DataSource
-import apartamentoRoutes from './routes/apartamento.routes';
+import 'reflect-metadata';
+import express, { Request, Response, NextFunction } from 'express';
+import dotenv from 'dotenv';
+import 'express-async-errors'; // Para lidar com erros assíncronos
+import { AppDataSource } from './data-source';
+import apartamentosRouter from './routes/apartamento.routes'; 
+import veiculosRouter from './routes/veiculos.routes';
 
 dotenv.config();
 
-console.log('DB_USERNAME:', process.env.DB_USERNAME);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-console.log('DB_NAME:', process.env.DB_NAME);
-
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
+// Middleware para interpretar JSON no corpo das requisições
 app.use(express.json());
 
-// Conectar ao banco de dados
+// Inicializar o DataSource
 AppDataSource.initialize()
     .then(() => {
-        console.log('Conectado ao banco de dados');
+        console.log('DataSource conectado com sucesso');
     })
-    .catch((error) => {
-        console.error('Erro ao conectar ao banco de dados', error);
+    .catch(error => {
+        console.error('Erro ao conectar com o DataSource', error);
     });
 
-// Rotas
-app.use('/api', apartamentoRoutes);
+// Usando os roteadores
+app.use('/apartamentos', apartamentosRouter);
+app.use('/veiculos', veiculosRouter);
 
-app.get('/', (req, res) => {
-    res.send('Servidor está funcionando!');
+// Middleware para lidar com erros
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
+    res.status(500).json({ message: 'Erro interno do servidor' });
 });
 
+// Iniciar o servidor
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });

@@ -4,29 +4,20 @@ import { Apartamento } from './Apartamento';
 @Entity()
 export class Veiculo {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
-    @ManyToOne(() => Apartamento, apartamento => apartamento.id)
-    id_apartamento: Apartamento;
-
-    @Column()
-    marca: string;
+    @ManyToOne(() => Apartamento, apartamento => apartamento.veiculos)
+    id_apartamento!: Apartamento;
 
     @Column()
-    modelo: string;
+    marca!: string;
 
     @Column()
-    cor: string;
+    modelo!: string;
 
     @Column()
-    placa: string;
+    cor!: string;
 
-    constructor() {
-        this.id = 0; // Ou outra lógica de inicialização adequada
-        this.id_apartamento = new Apartamento();
-        this.marca = '';
-        this.modelo = '';
-        this.cor = '';
-        this.placa = '';
-    }
+    @Column()
+    placa!: string;
 }
