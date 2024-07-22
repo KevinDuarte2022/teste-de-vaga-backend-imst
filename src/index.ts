@@ -5,12 +5,15 @@ import 'express-async-errors'; // Para lidar com erros assíncronos
 import { AppDataSource } from './data-source';
 import apartamentosRouter from './routes/apartamento.routes'; 
 import veiculosRouter from './routes/veiculos.routes';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 // Middleware para interpretar JSON no corpo das requisições
 app.use(express.json());
 
